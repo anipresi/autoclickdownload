@@ -1,0 +1,96 @@
+import pyautogui
+import time
+
+# 找到取消按钮的位置
+def find_cancel_button():
+    try:
+        cancel_button = pyautogui.locateOnScreen('取消.png')
+        print(cancel_button)
+        return cancel_button
+    except pyautogui.ImageNotFoundException:
+        print("未找到取消按钮")
+        return None
+
+# 找到返回按钮的位置
+def find_back_button():
+    try:
+        back_buttons = pyautogui.locateOnScreen('返回.png')
+        return back_buttons
+    except pyautogui.ImageNotFoundException:
+        print("未找到返回按钮")
+        return []
+
+# 点击取消按钮
+def click_cancel_buttons():
+    cancel_button_pos = find_cancel_button()
+    if cancel_button_pos is not None:
+        pyautogui.click(cancel_button_pos)
+        print("点击取消按钮")
+        return True
+    else:
+        print("未找到取消按钮")
+        return False
+
+# 点击返回按钮
+def click_back_buttons():
+    back_buttons_pos = find_back_button()
+    if back_buttons_pos:
+        pyautogui.click(back_buttons_pos)
+        print("点击返回按钮")
+        return True
+    else:
+        print("未找到返回按钮")
+        return False
+
+
+# 找到指定图片的位置
+def find_images(image_path):
+    try:
+        image_positions = list(pyautogui.locateAllOnScreen(image_path))
+        print(image_positions)
+        return image_positions
+    except Exception as e:
+        print("发生异常:", e)
+        return []
+
+
+    
+# 点击图片
+def click_images(image_positions,i):
+    image_center = pyautogui.center(image_positions[i])
+    pyautogui.click(image_center)
+    print("点击图片")
+
+
+
+# 225,182 ; 225,256  74
+# 主函数
+def main():
+     # 拖动鼠标到指定位置
+    # pyautogui.moveTo(225, (182+15*74), duration=1.0)
+
+    # 相对当前位置拖动鼠标
+    # pyautogui.dragRel(0,-15*74,duration=1.0)
+    i = 0
+    while True:
+        if click_cancel_buttons():
+            time.sleep(1)  # 暂停一秒钟，让界面响应
+            click_back_buttons()
+            time.sleep(1)  # 暂停一秒钟，让界面响应
+            pyautogui.click(225,(182+i*74))
+            time.sleep(1)  # 暂停一秒钟，让界面响应
+            i=i+1
+            if i >= 15:
+                print("已点击完所有图片，停止程序")
+                break  # 退出循环
+        else:
+            print("未找到取消按钮")
+    time.sleep(1)  # 每隔1秒检查一次是否有取消按钮
+    # # pyautogui.scroll(50)  # 向下滚动10单位
+  
+
+
+
+if __name__ == "__main__":
+    main()
+
